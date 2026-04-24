@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NURVA - Digital Safety Platform</title>
+  <meta name="theme-color" content="#1a1a2e" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="nurva-app">
+    <!-- HEADER -->
+    <div class="nurva-header text-center mb-4">
+      <h1 class="display-5 fw-bold">NURVA</h1>
+      <p class="subtitle h6">Nurturing Digital Resilience for Families</p>
+      <p class="lead">"SAFE TOGETHER, SMART FOREVER"</p>
+    </div>
+
+    <!-- DAILY TIPS -->
+    <div class="daily-tip-card mb-4 p-3 bg-light rounded">
+      <div class="d-flex align-items-start">
+        <div class="tip-icon me-3 fs-4">💡</div>
+        <div class="tip-content">
+          <h5 class="tip-title mb-1">Tips Hari Ini</h5>
+          <p id="dailyTipText" class="tip-text mb-0">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div class="stats-card mb-4 p-3 bg-white rounded shadow-sm">
+      <h5 class="text-center mb-3">📊 Statistik Hari Ini</h5>
+      <div class="row text-center g-3">
+        <div class="col-6">
+          <div class="stat-icon fs-4">⏱️</div>
+          <div class="stat-value fw-bold" id="screenTimeValue">2h 15m</div>
+          <div class="stat-label small text-muted">Waktu Layar</div>
+        </div>
+        <div class="col-6">
+          <div class="stat-icon fs-4">📱</div>
+          <div class="stat-value fw-bold" id="topAppValue">TikTok</div>
+          <div class="stat-label small text-muted">Terbanyak</div>
+        </div>
+        <div class="col-6">
+          <div class="stat-icon fs-4">✅</div>
+          <div class="stat-value fw-bold" id="complianceValue">80%</div>
+          <div class="stat-label small text-muted">Kepatuhan</div>
+        </div>
+        <div class="col-6">
+          <div class="stat-icon fs-4">🎯</div>
+          <div class="stat-value fw-bold">2 jam</div>
+          <div class="stat-label small text-muted">Target Besok</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SMART CHECKER -->
+    <div class="checker-box p-4 bg-white rounded shadow-sm mb-4">
+      <h2 class="text-center mb-4">🛡️ SMART CHECKER</h2>
+      <p class="text-center mb-4">Masukkan data anak untuk rekomendasi personal sesuai PP Tunas 2025:</p>
+
+      <div class="input-group mb-3">
+        <input
+          type="number"
+          id="ageInput"
+          class="form-control form-control-lg text-center"
+          placeholder="Usia anak"
+          min="1"
+          max="17"
+        />
+        <span class="input-group-text">tahun</span>
+      </div>
+
+      <div class="gender-group mb-4">
+        <p class="text-center mb-2">Jenis Kelamin:</p>
+        <div class="d-flex justify-content-center gap-3">
+          <label class="gender-option btn btn-outline-primary active">
+            <input type="radio" name="gender" value="L" checked hidden />
+            👦 Laki-laki
+          </label>
+          <label class="gender-option btn btn-outline-primary">
+            <input type="radio" name="gender" value="P" hidden />
+            👧 Perempuan
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-checker w-100 py-3 fw-bold" onclick="checkAge()">CEK REKOMENDASI</button>
+      <div id="result" class="mt-4"></div>
+    </div>
+
+    <!-- SCREEN TIME GUARDIAN -->
+    <div class="screen-time p-4 bg-white rounded shadow-sm mb-4">
+      <h2 class="text-center mb-3">⏰ Screen Time Guardian</h2>
+      <p class="text-center mb-4">Atur batas waktu harian sesuai rekomendasi PP Tunas 2025</p>
+
+      <div class="time-control mb-4">
+        <label for="tiktokSlider" class="form-label">TikTok (Maks 120 menit/hari)</label>
+        <input type="range" id="tiktokSlider" class="form-range time-slider" min="0" max="120" value="60" />
+        <div class="time-display text-end">🕗 <span id="tiktokTime">60</span> menit/hari</div>
+      </div>
+
+      <div class="time-control mb-4">
+        <label for="youtubeSlider" class="form-label">YouTube (Maks 120 menit/hari)</label>
+        <input type="range" id="youtubeSlider" class="form-range time-slider" min="0" max="120" value="90" />
+        <div class="time-display text-end">🕗 <span id="youtubeTime">90</span> menit/hari</div>
+      </div>
+
+      <div class="time-control mb-4">
+        <label for="instagramSlider" class="form-label">Instagram (Maks 90 menit/hari)</label>
+        <input type="range" id="instagramSlider" class="form-range time-slider" min="0" max="90" value="45" />
+        <div class="time-display text-end">🕗 <span id="instagramTime">45</span> menit/hari</div>
+      </div>
+
+      <button class="apply-btn w-100 py-2 fw-bold" onclick="applyScreenTime()">✅ Terapkan Batasan</button>
+      <div id="successMessage" class="success-message mt-3 text-center text-success fw-bold"></div>
+
+      <div class="reminder-section mt-4 p-3 bg-light rounded">
+        <h5 class="text-center mb-2">🔔 Pengingat Otomatis</h5>
+        <p class="text-center mb-2">NURVA akan mengingatkan Anda untuk mengecek aktivitas anak:</p>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+          <button class="btn btn-sm btn-outline-primary" onclick="setReminder(30)">30 Menit</button>
+          <button class="btn btn-sm btn-outline-primary active" onclick="setReminder(60)">1 Jam</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="setReminder(120)">2 Jam</button>
+        </div>
+        <p id="reminderStatus" class="text-center mt-2 text-muted small">Status: Belum aktif</p>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer text-center p-3 text-muted small">
+      <p>🛡️ Dikembangkan oleh Tim NURVA — SMA Sains Wahid Hasyim Yogyakarta</p>
+      <p>Platform edukasi sesuai PP Nomor 17 Tahun 2025 tentang Perlindungan Anak di Ranah Digital</p>
+      <p class="note mt-2">
+        💡 Versi 1.1: Progress Bar Visual + Tips Harian + Quick Stats
+      </p>
+    </div>
+  </div>
+
+  <script src="checker.js"></script>
+  <script>
+    // Update slider display
+    document.getElementById('tiktokSlider').addEventListener('input', (e) => {
+      document.getElementById('tiktokTime').textContent = e.target.value;
+    });
+    document.getElementById('youtubeSlider').addEventListener('input', (e) => {
+      document.getElementById('youtubeTime').textContent = e.target.value;
+    });
+    document.getElementById('instagramSlider').addEventListener('input', (e) => {
+      document.getElementById('instagramTime').textContent = e.target.value;
+    });
+
+    // Gender option toggle
+    document.querySelectorAll('.gender-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.gender-option').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Dummy daily tip
+    const tips = [
+      "Ajak anak diskusi sebelum memberi batasan gadget.",
+      "Pastikan fitur 'Restricted Mode' aktif di YouTube.",
+      "Buat kesepakatan: boleh pakai TikTok 1 jam jika PR sudah selesai.",
+      "Cek riwayat pencarian anak seminggu sekali dengan tenang.",
+      "Gunakan fitur Family Link untuk memantau aplikasi baru."
+    ];
+    document.getElementById('dailyTipText').textContent = tips[Math.floor(Math.random() * tips.length)];
+  </script>
+</body>
+</html>
